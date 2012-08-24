@@ -481,6 +481,11 @@
 #pragma mark -
 #pragma mark UIBarButtonItem functions
 
+- (Class)bookMarkViewControllerClass
+{
+    return [ViewBookmarkViewController class];
+}
+
 - (void)viewBookmark:(UIBarButtonItem *)button {
     // Make other popover disappear
     if ([self.actionActionSheet isVisible]) {
@@ -502,7 +507,7 @@
         [self.bookmarkPopoverController dismissPopoverAnimated:YES];
         self.bookmarkPopoverController = nil;
     } else {
-        ViewBookmarkViewController * viewBookmarkViewController = [[[ViewBookmarkViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
+        ViewBookmarkViewController * viewBookmarkViewController = [[[[self bookMarkViewControllerClass] alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
         viewBookmarkViewController.delegate = self;
         [viewBookmarkViewController setBookmark:[webView stringByEvaluatingJavaScriptFromString:@"document.title"]
                                         url:self.url];
@@ -542,26 +547,9 @@
     }
 }
 
-- (void)actionButton:(UIBarButtonItem *)button {
-    if ([self.bookmarkPopoverController isPopoverVisible]) {
-        [self.bookmarkPopoverController dismissPopoverAnimated:YES];
-    }
-    if ([self.addBookmarkPopoverController isPopoverVisible]) {
-        [self.addBookmarkPopoverController dismissPopoverAnimated:YES];
-        // addBookmarkPopoverController is created by this actionSheet
-        // if this button is tapped, make the popover disappear and don't create the actionSheet
-        return;
-    }
-    
-    if (printInteraction != nil) {
-        [printInteraction dismissAnimated:YES];
-        printInteraction = nil;
-        // printInteraction is created by this actionSheet
-        // if this button is tapped, make it disappear and don't create the actionSheet
-        return;
-    }
-    
-    // Create the actionSheet or make it disappear if needed
+// Create the actionSheet or make it disappear if needed
+- (void)prepareActionSheet
+{
     if (!self.actionActionSheet) {
         self.actionActionSheet = [[UIActionSheet alloc] initWithTitle:[_urlToHandle.absoluteString stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
                                                          delegate:self
@@ -597,6 +585,30 @@
             self.actionActionSheet.cancelButtonIndex = [_actionActionSheet addButtonWithTitle:CIALBrowserLocalizedString(@"Cancel",@"")];
         }
     }
+}
+
+- (void)actionButton:(UIBarButtonItem *)button {
+    if ([self.bookmarkPopoverController isPopoverVisible]) {
+        [self.bookmarkPopoverController dismissPopoverAnimated:YES];
+    }
+    if ([self.addBookmarkPopoverController isPopoverVisible]) {
+        [self.addBookmarkPopoverController dismissPopoverAnimated:YES];
+        // addBookmarkPopoverController is created by this actionSheet
+        // if this button is tapped, make the popover disappear and don't create the actionSheet
+        return;
+    }
+    
+    if (printInteraction != nil) {
+        [printInteraction dismissAnimated:YES];
+        printInteraction = nil;
+        // printInteraction is created by this actionSheet
+        // if this button is tapped, make it disappear and don't create the actionSheet
+        return;
+    }
+
+    // Create the actionSheet or make it disappear if needed
+    [self prepareActionSheet];
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (_actionActionSheet.visible) {
             [_actionActionSheet dismissWithClickedButtonIndex:_actionActionSheet.cancelButtonIndex

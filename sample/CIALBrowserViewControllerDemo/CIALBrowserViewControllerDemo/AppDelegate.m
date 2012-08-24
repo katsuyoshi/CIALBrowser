@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "CIALBrowserViewController.h"
+#import "TFBrowserViewController.h"
 
 @implementation AppDelegate
 
@@ -22,7 +22,7 @@
     // Setup main window
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
-    _mainViewController = [[CIALBrowserViewController alloc] init];
+    _mainViewController = [[TFBrowserViewController alloc] init];
     
     // Configure and show the window
     [self.window addSubview:[_mainViewController view]];
