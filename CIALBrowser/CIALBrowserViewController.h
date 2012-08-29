@@ -63,4 +63,9 @@
 - (void)dismissViewBookmMarkViewController:(ViewBookmarkViewController *)viewController;
 - (void)dismissAddBookmMarkViewController:(AddBookmarkViewController *)viewController;
 
+
+#pragma mark - Factory class
+
+- (NSString *)viewBookMarkViewControllerName;
+
 @end

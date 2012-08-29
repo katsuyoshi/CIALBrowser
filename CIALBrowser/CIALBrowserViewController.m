@@ -358,6 +358,18 @@
     return url;
 }
 
+#pragma mark - Factory class
+
+- (NSString *)viewBookMarkViewControllerName
+{
+    return @"ViewBookmarkViewController";
+}
+
+- (NSString *)addBookmarkViewControllerName
+{
+    return @"AddBookmarkViewController";
+}
+
 #pragma mark -
 #pragma mark UITextField delegate
 
@@ -481,11 +493,6 @@
 #pragma mark -
 #pragma mark UIBarButtonItem functions
 
-- (Class)bookMarkViewControllerClass
-{
-    return [ViewBookmarkViewController class];
-}
-
 - (void)viewBookmark:(UIBarButtonItem *)button {
     // Make other popover disappear
     if ([self.actionActionSheet isVisible]) {
@@ -507,7 +514,8 @@
         [self.bookmarkPopoverController dismissPopoverAnimated:YES];
         self.bookmarkPopoverController = nil;
     } else {
-        ViewBookmarkViewController * viewBookmarkViewController = [[[[self bookMarkViewControllerClass] alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
+        Class klass = NSClassFromString([self viewBookMarkViewControllerName]);
+        ViewBookmarkViewController * viewBookmarkViewController = [[[klass alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
         viewBookmarkViewController.delegate = self;
         [viewBookmarkViewController setBookmark:[webView stringByEvaluatingJavaScriptFromString:@"document.title"]
                                         url:self.url];
@@ -528,7 +536,8 @@
 }
 
 - (void)addBookmark {
-    AddBookmarkViewController * addBookmarkViewController = [[[AddBookmarkViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
+    Class klass = NSClassFromString([self addBookmarkViewControllerName]);
+    AddBookmarkViewController * addBookmarkViewController = [[[klass alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
     [addBookmarkViewController setBookmark:[webView stringByEvaluatingJavaScriptFromString:@"document.title"]
                                        url:self.url];
     addBookmarkViewController.delegate = self;
