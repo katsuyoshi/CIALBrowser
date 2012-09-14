@@ -50,6 +50,8 @@
             printButtonIndex = -1;
         }
         
+        uiLockButtonIndex = [self.actionActionSheet addButtonWithTitle:CIALBrowserLocalizedString(@"UI Lock")];
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             self.actionActionSheet.cancelButtonIndex = -1;
         } else {
@@ -62,9 +64,16 @@
 {
 }
 
+- (void)uiLockAction:(id)sender
+{
+}
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (setAsHomeButtonIndex == buttonIndex) {
         [self setAsHomeButtonAction:actionSheet];
+    } else
+    if (uiLockButtonIndex == buttonIndex) {
+        [self uiLockAction:actionSheet];
     } else {
         [super actionSheet:actionSheet clickedButtonAtIndex:buttonIndex];
     }

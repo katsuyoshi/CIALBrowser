@@ -10,8 +10,10 @@
 
 @interface TFBrowserViewController : CIALBrowserViewController {
     NSInteger setAsHomeButtonIndex;
+    NSInteger uiLockButtonIndex;
 }
 
 - (void)setAsHomeButtonAction:(id)sender;
+- (void)uiLockAction:(id)sender;
 
 @end
