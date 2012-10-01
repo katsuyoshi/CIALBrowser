@@ -10,7 +10,6 @@
 #import "AddBookmarkViewController.h"
 
 @interface AddBookmarkViewController ()
-- (void)saveAction;
 - (void)cancelAction;
 - (void)saveBookmarks;
 @end

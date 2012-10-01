@@ -20,6 +20,8 @@
 @property (retain,nonatomic) BookmarkObject *bookmark;
 
 - (void)setBookmark:(NSString *)aName url:(NSURL *)aURL;
+- (void)saveAction;
+
 @end
 
 @protocol AddBookmarkDelegate <NSObject>
