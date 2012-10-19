@@ -377,16 +377,30 @@
 {
     NSString *urlString = url.absoluteString;
     if ([urlString length]) {
-        if (!url.scheme.length) {
-            url = [NSURL URLWithString:[@"http://" stringByAppendingString:urlString]];
-        }
+        url = [self urlWithString:urlString];
         [_urlToLoad release];
         _urlToLoad = [url copy];
     }
 }
 
+- (NSURL *)urlWithString:(NSString *)urlString
+{
+    NSURL *url = nil;
+    if ([urlString length]) {
+        if ([urlString rangeOfString:@"."].location == NSNotFound) {
+            url = [NSURL URLWithString:[@"http://www.google.com/search?q=" stringByAppendingString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        } else {
+            url = [NSURL URLWithString:urlString];
+            if (!url.scheme.length) {
+                url = [NSURL URLWithString:[@"http://" stringByAppendingString:urlString]];
+            }
+        }
+    }
+    return url;
+}
+
 - (BOOL) textFieldShouldReturn:(UITextField *) textField {
-    NSURL *url = [NSURL URLWithString:locationField.text];
+    NSURL *url = [self urlWithString:locationField.text];
     
     // if user didn't enter "http", add it the the url
     if (!url.scheme.length) {
