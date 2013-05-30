@@ -317,6 +317,12 @@
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [webView stopLoading];
+}
+
 #pragma mark -
 
 - (void)loadURL:(NSURL *)url {
