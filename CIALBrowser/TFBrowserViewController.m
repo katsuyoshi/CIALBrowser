@@ -15,6 +15,47 @@
 
 @implementation TFBrowserViewController
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self layoutSubviewsIfNeeds];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self performSelector:@selector(adjustSizeAfterApper) withObject:nil afterDelay:0.1];
+}
+
+- (void)adjustSizeAfterApper
+{
+    UIApplication *app = [UIApplication sharedApplication];
+    [self didRotateFromInterfaceOrientation:app.statusBarOrientation];
+}
+
+- (BOOL)isOS7
+{
+    return  [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0;
+}
+
+- (void)layoutSubviewsIfNeeds
+{
+    if (!self.isOS7) return;
+
+    CGRect frame;
+    
+    frame = webView.frame;
+    if (frame.origin.y != 20) {
+        frame.origin.y = 20;
+        frame.size.height -= 20;
+        webView.frame = frame;
+
+        frame = navigationBar.frame;
+        frame.origin.y += 20;
+        navigationBar.frame = frame;
+    }
+}
+
 // Create the actionSheet or make it disappear if needed
 - (void)prepareActionSheet
 {
@@ -67,6 +108,21 @@
 - (void)uiLockAction:(id)sender
 {
 }
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    if (self.isOS7 == NO) {
+        [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    } else {
+        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+            if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+                webView.frame = CGRectMake(0, navigationBar.frame.size.height + 20, self.view.frame.size.width, self.view.frame.size.height - navigationBar.frame.size.height - toolBar.frame.size.height - 20);
+            } else {
+                webView.frame = CGRectMake(0, navigationBar.frame.size.height + 20, self.view.frame.size.height, self.view.frame.size.width - navigationBar.frame.size.height - toolBar.frame.size.height - 20);
+            }
+        }
+    }
+}
+
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (setAsHomeButtonIndex == buttonIndex) {
