@@ -528,7 +528,7 @@
                                                    permittedArrowDirections:UIPopoverArrowDirectionDown|UIPopoverArrowDirectionUp
                                                                    animated:YES];
         } else {
-            [self presentModalViewController:navController animated:YES];
+            [self presentViewController:navController animated:YES completion:NULL];
         }
     }
 
@@ -550,7 +550,7 @@
                                                permittedArrowDirections:UIPopoverArrowDirectionDown|UIPopoverArrowDirectionUp
                                                                animated:YES];
     } else {
-        [self presentModalViewController:navController animated:YES];
+        [self presentViewController:navController animated:YES completion:NULL];
     }
 }
 
@@ -657,7 +657,7 @@
             mailViewController.modalPresentationStyle = UIModalPresentationPageSheet;
         }
         
-        [self presentModalViewController:mailViewController animated:YES];
+        [self presentViewController:mailViewController animated:YES completion:NULL];
         [mailViewController release];
     } else if (printButtonIndex == buttonIndex) {
         Class printInteractionController = NSClassFromString(@"UIPrintInteractionController");
